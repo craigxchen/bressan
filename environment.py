@@ -19,8 +19,8 @@ class Grid:
         self.curr_state = self.start.copy()
         
     def step(self, action): 
-        # action will be inputted as a number in range(self.n**2 // 2)
-        assert action in list(range(self.n**2 // 2))
+        # action will be inputted as a number in range(self.n**2 * 2)
+        assert action in list(range(self.n**2 * 2))
         
         point = action//2 
         
@@ -46,7 +46,7 @@ class Grid:
     
     def reset(self):
         self.curr_state = self.start.copy()
-        return self.curr_state, 0.0, False
+        return self.curr_state, False
     
     def rand_reset(self):
         temp = np.ones(self.n**2)
@@ -56,14 +56,15 @@ class Grid:
         
         done = np.array_equal(self.curr_state, self.final[0]) or np.array_equal(self.curr_state, self.final[1])
         
-        return self.curr_state, 0.0, done
+        return self.curr_state, done
     
     def scramble_reset(self, k):
         # take k random moves from goal state
-        goal = self.final[k%2].copy() # random goal (assuming k ~ unif(1,8))
+        b = np.random.binomial(1,1/2)
+        goal = self.final[b].copy() # random goal (assuming k ~ unif(1,8))
         
         for i in range(k):
-            point_index = np.random.randint(0,16)
+            point_index = np.random.randint(0,self.n**2)
             index_delta = np.random.choice([-self.n, 1, self.n, -1])
             if (point_index%self.n == 0) and (index_delta == -1):
                 swap_index = point_index + self.n-1
@@ -79,7 +80,7 @@ class Grid:
             goal[x2][y2] = temp1
             
         self.curr_state = goal
-        return self.curr_state, 0.0, False
+        return self.curr_state, False
 
     def get_cost(self, state):
         return min(self.L1_cost(state, self.final[0]),
@@ -88,5 +89,3 @@ class Grid:
     @staticmethod
     def L1_cost(x,y):
         return np.sum(np.abs(x-y))
-
-    
