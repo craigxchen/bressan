@@ -6,7 +6,7 @@ from environment import Grid
 from ppo import PPO
 
 # Hyperparameters
-grid_size   = 4
+grid_size   = 6
 T_horizon   = 10
 N_iterations= 100000
 random_seed = None
@@ -23,7 +23,7 @@ model.train()
 # uncomment to load trained model on 4x4 grid
 # model = PPO(grid_size=4, kernel_size=3, n_filters=32, n_latent_var=128, lr=3e-4, 
 #             gamma=0.99, lmbda=0.9, beta=0.4, eps_clip=0.2, k_epoch=1)
-# model.load_state_dict(torch.load('bressan.pt'))
+# model.load_state_dict(torch.load('bressan_4x4.pt'))
 # model.eval()
 
 # %% Training loop
